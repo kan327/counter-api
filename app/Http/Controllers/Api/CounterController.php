@@ -37,7 +37,6 @@ class CounterController extends Controller
         };
         $validator = Validator::make($request->all(), [
             'title' => 'required|min:5|max:255',
-            'desc' => 'required|min:10|max:500',
             'number' => 'nullable|numeric',
         ]);
 
@@ -49,14 +48,13 @@ class CounterController extends Controller
         $counter = Counter::create([
             'token' => $token,
             'title' => $request->title,
-            'desc' => $request->desc,
             'number' => $request->number ?? 1
         ]);
 
         return new CounterResource(true, 'successfully added new data', $counter);
     }
 
-    public function show($id, $token)
+    public function show($token, $id)
     {
         if(!$this->verivyToken($token)){
             return new CounterResource(false, 'error on token: Token not recognized', []);
@@ -74,14 +72,13 @@ class CounterController extends Controller
         return new CounterResource(true, 'successfully get detail data Counter!', $counter);
     }
 
-    public function update(Request $request, $id, $token)
+    public function update(Request $request, $token, $id)
     {
         if(!$this->verivyToken($token)){
             return new CounterResource(false, 'error on token: Token not recognized', []);
         };
         $validator = Validator::make($request->all(), [
             'title' => 'nullable|string|min:5|max:255',
-            'desc' => 'nullable|string|min:10|max:500',
             'number' => 'nullable|numeric',
         ]);
 
@@ -100,14 +97,13 @@ class CounterController extends Controller
         
         $counter->update(array_filter([
             'title' => $request->input('title'),
-            'desc' => $request->input('desc'),
             'number' => $request->input('number'),
         ]));
 
         return new CounterResource(true, 'successfully updated new data', $counter);
     }
     
-    public function destroy($id, $token)
+    public function destroy($token, $id)
     {
         if(!$this->verivyToken($token)){
             return new CounterResource(false, 'error on token: Token not recognized', []);

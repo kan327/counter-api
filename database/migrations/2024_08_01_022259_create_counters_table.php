@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string("token");
             $table->string("title");
-            $table->string("desc");
             $table->bigInteger("number");
             $table->timestamps();
         });
